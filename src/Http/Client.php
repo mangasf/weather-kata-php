@@ -1,6 +1,6 @@
 <?php
 
-namespace Codium\CleanCode\Http;
+namespace WeatherKata\Http;
 
 class Client
 {

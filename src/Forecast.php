@@ -1,8 +1,8 @@
 <?php
 
-namespace Codium\CleanCode;
+namespace WeatherKata;
 
-use Codium\CleanCode\Http\Client;
+use WeatherKata\Http\Client;
 
 class Forecast
 {

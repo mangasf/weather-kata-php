@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Codium\CleanCode;
+namespace Tests\WeatherKata;
 
-use Codium\CleanCode\Forecast;
+use WeatherKata\Forecast;
 use PHPUnit\Framework\TestCase;
 
 class WeatherTest extends TestCase
