@@ -2,7 +2,7 @@
 The goals is to identify the code smells and fix it.
 
 # Pre requisites
-    PHP 7.1 
+    PHP 8.1
     
 # Install dependencies
 
