@@ -2,7 +2,7 @@
 
 namespace Codium\CleanCode;
 
-use GuzzleHttp\Client;
+use Codium\CleanCode\Http\Client;
 
 class Forecast
 {
@@ -21,15 +21,13 @@ class Forecast
             $client = new Client();
 
             // Find the id of the city on metawheather
-            $woeid = json_decode($client->get("https://www.metaweather.com/api/location/search/?query=$city")->getBody()->getContents(),
-                true)[0]['woeid'];
+            $woeid = $client->get("https://www.metaweather.com/api/location/search/?query=$city");
             $city = $woeid;
 
             // Find the predictions for the city
-            $results = json_decode($client->get("https://www.metaweather.com/api/location/$woeid")->getBody()->getContents(),
-                true)['consolidated_weather'];
-            foreach ($results as $result) {
+            $results = $client->get("https://www.metaweather.com/api/location/$woeid");
 
+            foreach ($results as $result) {
                 // When the date is the expected
                 if ($result["applicable_date"] == $datetime->format('Y-m-d')) {
                     // If we have to return the wind information
@@ -43,5 +41,6 @@ class Forecast
         } else {
             return "";
         }
+        return "";
     }
 }

@@ -7,32 +7,29 @@ use PHPUnit\Framework\TestCase;
 
 class WeatherTest extends TestCase
 {
-    // https://www.metaweather.com/api/location/766273/
     /** @test */
     public function find_the_weather_of_today()
     {
         $forecast = new Forecast();
-        $city = "Madrid";
+        $city     = "Madrid";
 
         $prediction = $forecast->predict($city);
 
-        echo "Today: $prediction\n";
-        $this->assertTrue(true, 'I don\'t know how to test it');
+        $this->assertEquals('sunny', $prediction);
     }
 
     /** @test */
     public function find_the_weather_of_any_day()
     {
         $forecast = new Forecast();
-        $city = "Madrid";
+        $city     = "Madrid";
 
         $prediction = $forecast->predict($city, new \DateTime('+2 days'));
 
-        echo "Day after tomorrow: $prediction\n";
-        $this->assertTrue(true, 'I don\'t know how to test it');
+        $this->assertEquals('sunny', $prediction );
     }
 
-    /** @test */
+/** @test */
     public function find_the_wind_of_any_day()
     {
         $forecast = new Forecast();
@@ -40,8 +37,7 @@ class WeatherTest extends TestCase
 
         $prediction = $forecast->predict($city, null, true);
 
-        echo "Wind: $prediction\n";
-        $this->assertTrue(true, 'I don\'t know how to test it');
+        $this->assertEquals(60.0, $prediction);
     }
 
     /** @test */
