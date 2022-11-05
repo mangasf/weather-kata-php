@@ -4,43 +4,72 @@ namespace WeatherKata;
 
 use WeatherKata\Http\Client;
 
-class Forecast
+interface WeatherClientService
 {
-    public function predict(string &$city, \DateTime $datetime = null, bool $wind = false): string
+    public function get(string $url): string|array;
+}
+
+class GetForecastPredictionRequest
+{
+    private string $city;
+    private \DateTime $datetime;
+    private bool $wind;
+
+    public function __construct(string $city, \DateTime $datetime, bool $wind)
     {
-        // When date is not provided we look for the current prediction
-        if (!$datetime) {
-            $datetime = new \DateTime();
+        $this->city = $city;
+        $this->datetime = $datetime;
+        $this->wind = $wind;
+    }
+
+    public function getCityName(): string
+    {
+        return $this->city;
+    }
+
+    public function getDatetime(): \DateTime
+    {
+        return !$this->datetime ? new \DateTime() : $this->datetime;
+    }
+}
+
+class GetForecastPrediction
+{
+    private WeatherClientService $client;
+
+    public function __construct(WeatherClientService $client)
+    {
+        $this->client = $client;
+    }
+
+    public function predict(GetForecastPredictionRequest $request): string
+    {
+        // If there aren't predictions
+        if ($request->getDatetime() >= new \DateTime("+6 days 00:00:00")) {
+            return;
         }
 
-        // If there are predictions
-        if ($datetime < new \DateTime("+6 days 00:00:00")) {
+        // Find the id of the city on metawheather
+        $cityId = $client->get(
+            "https://www.metaweather.com/api/location/search/?query=" .
+                $request->getCityName()
+        );
+        // Find the predictions for the city
+        $results = $client->get(
+            "https://www.metaweather.com/api/location/$cityId"
+        );
 
-
-            // Create a Guzzle Http Client
-            $client = new Client();
-
-            // Find the id of the city on metawheather
-            $woeid = $client->get("https://www.metaweather.com/api/location/search/?query=$city");
-            $city = $woeid;
-
-            // Find the predictions for the city
-            $results = $client->get("https://www.metaweather.com/api/location/$woeid");
-
-            foreach ($results as $result) {
-                // When the date is the expected
-                if ($result["applicable_date"] == $datetime->format('Y-m-d')) {
-                    // If we have to return the wind information
-                    if ($wind) {
-                        return $result['wind_speed'];
-                    } else {
-                        return $result['weather_state_name'];
-                    }
+        // Maybe add methdo that parses results?
+        foreach ($results as $result) {
+            // When the date is the expected
+            if ($result["applicable_date"] == $datetime->format("Y-m-d")) {
+                // If we have to return the wind information
+                if ($wind) {
+                    return $result["wind_speed"];
+                } else {
+                    return $result["weather_state_name"];
                 }
             }
-        } else {
-            return "";
         }
-        return "";
     }
 }
