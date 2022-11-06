@@ -3,6 +3,10 @@
 namespace WeatherKata;
 
 use WeatherKata\Http\Client;
+use WeatherKata\UseCase\GetForecastWeatherPredictionUseCase;
+use WeatherKata\UseCase\GetForecastWindPredictionUseCase;
+use WeatherKata\Repository\MetaweatherLocationRepository;
+use WeatherKata\RequestModel\GetForecastPredictionRequest;
 
 class GetForecastPredictionController
 {

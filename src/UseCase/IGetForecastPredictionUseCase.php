@@ -1,6 +1,7 @@
 <?php
 
-namespace WeatherKata;
+namespace WeatherKata\UseCase;
+use WeatherKata\RequestModel\GetForecastPredictionRequest;
 
 interface IGetForecastPredictionUseCase
 {

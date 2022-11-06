@@ -1,6 +1,9 @@
 <?php
 
-namespace WeatherKata;
+namespace WeatherKata\UseCase;
+
+use WeatherKata\Repository\MetaweatherLocationRepository;
+use WeatherKata\RequestModel\GetForecastPredictionRequest;
 
 class GetForecastWindPredictionUseCase implements IGetForecastPredictionUseCase
 {
