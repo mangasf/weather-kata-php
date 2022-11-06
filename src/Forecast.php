@@ -2,45 +2,29 @@
 
 namespace WeatherKata;
 
-use WeatherKata\Http\Client;
+use WeatherKata\City;
 
 class Forecast
 {
-    public function predict(string &$city, \DateTime $datetime = null, bool $wind = false): string
+    const MAX_PREDICTABLE_DATETIME = "+6 days 00:00:00";
+
+    private function isValidPredictionDate(\Datetime $prediction_date): bool
     {
-        // When date is not provided we look for the current prediction
-        if (!$datetime) {
-            $datetime = new \DateTime();
-        }
+        return ($prediction_date < new \DateTime(self::MAX_PREDICTABLE_DATETIME));
+    }
 
-        // If there are predictions
-        if ($datetime < new \DateTime("+6 days 00:00:00")) {
-
-
-            // Create a Guzzle Http Client
-            $client = new Client();
-
-            // Find the id of the city on metawheather
-            $woeid = $client->get("https://www.metaweather.com/api/location/search/?query=$city");
-            $city = $woeid;
-
-            // Find the predictions for the city
-            $results = $client->get("https://www.metaweather.com/api/location/$woeid");
-
-            foreach ($results as $result) {
-                // When the date is the expected
-                if ($result["applicable_date"] == $datetime->format('Y-m-d')) {
-                    // If we have to return the wind information
-                    if ($wind) {
-                        return $result['wind_speed'];
-                    } else {
-                        return $result['weather_state_name'];
-                    }
-                }
-            }
-        } else {
+    public function predict(string &$city_name, \DateTime $prediction_date = new \DateTime(), bool $is_wind_prediction = false): string
+    {
+        if (!$this->isValidPredictionDate($prediction_date)) {
             return "";
         }
-        return "";
+
+        $city = City::getID($city_name);
+
+        if ($is_wind_prediction) {
+            return WindPrediction::execute($city, $prediction_date);
+        }
+
+        return WeatherPrediction::execute($city, $prediction_date);
     }
 }
