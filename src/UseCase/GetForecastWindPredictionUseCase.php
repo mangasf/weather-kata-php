@@ -14,12 +14,14 @@ class GetForecastWindPredictionUseCase implements IGetForecastPredictionUseCase
         $this->metaweatherLocationRepository = $metaweatherLocationRepository;
     }
 
-    public function doPrediction(GetForecastPredictionRequest $request): string
+    public function doPrediction(GetForecastPredictionRequest &$request): string
     {
         // Find the id of the city on metawheather
         $cityId = $this->metaweatherLocationRepository->findLocationIdByName($request->getCityName());
+        $request->setCityId($cityId);
+        
         // Find the predictions for the city
-        $results = $this->metaweatherLocationRepository->findLocationPredictionsById($cityId);
+        $results = $this->metaweatherLocationRepository->findLocationPredictionsById($request->getCityId());
 
         foreach ($results as $result) {
           // If the date is not the expected, skip to next result.

@@ -4,22 +4,39 @@ namespace WeatherKata\RequestModel;
 
 class GetForecastPredictionRequest
 {
-    private string $city;
-    private ?\DateTime $datetime;
+  private ?int $cityId;
+  private string $cityName;
+  private ?\DateTime $datetime;
 
-    public function __construct(string $city, ?\DateTime $datetime = null)
-    {
-        $this->city = $city;
-        $this->datetime = $datetime;
-    }
+  public function __construct(?int $cityId, string $cityName, ?\DateTime $datetime = null)
+  {
+    $this->cityId = $cityId;
+    $this->cityName = $cityName;
+    $this->datetime = $datetime;
+  }
 
-    public function getCityName(): string
-    {
-        return $this->city;
-    }
+  public static function create(string $cityName, ?\DateTime $datetime = null)
+  {
+    return new self(null, $cityName, $datetime);
+  }
 
-    public function getDatetime(): \DateTime
-    {
-        return !$this->datetime ? new \DateTime() : $this->datetime;
-    }
+  public function getCityId(): ?int
+  {
+    return $this->cityId;
+  }
+
+  public function setCityId(int $cityId)
+  {
+    $this->cityId = $cityId;
+  }
+
+  public function getCityName(): string
+  {
+      return $this->cityName;
+  }
+
+  public function getDatetime(): \DateTime
+  {
+      return !$this->datetime ? new \DateTime() : $this->datetime;
+  }
 }

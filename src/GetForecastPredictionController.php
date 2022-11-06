@@ -19,7 +19,7 @@ class GetForecastPredictionController
 
   public function predict(string &$city, \DateTime $datetime = null, bool $wind = false)
   {
-    $request = new GetForecastPredictionRequest($city, $datetime);
+    $request = GetForecastPredictionRequest::create($city, $datetime);
     
     // If there aren't predictions
     if ($request->getDatetime() >= new \DateTime("+6 days 00:00:00")) {
@@ -29,8 +29,10 @@ class GetForecastPredictionController
     $getForecastPredictionUseCase = $wind ?
       new GetForecastWindPredictionUseCase($this->metaweatherLocationRepository) :
       new GetForecastWeatherPredictionUseCase($this->metaweatherLocationRepository);
-   
-    
-    return $getForecastPredictionUseCase->doPrediction($request);
+       
+    $prediction = $getForecastPredictionUseCase->doPrediction($request);
+    $city = $request->getCityId();
+
+    return $prediction;
   }
 }
