@@ -1,5 +1,5 @@
 install:
-	composer install
+	composer install --ignore-platform-reqs
 
 .PHONY: tests
 tests:
