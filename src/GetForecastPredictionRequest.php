@@ -5,9 +5,9 @@ namespace WeatherKata;
 class GetForecastPredictionRequest
 {
     private string $city;
-    private \DateTime $datetime;
+    private ?\DateTime $datetime;
 
-    public function __construct(string $city, \DateTime $datetime)
+    public function __construct(string $city, ?\DateTime $datetime = null)
     {
         $this->city = $city;
         $this->datetime = $datetime;

@@ -2,7 +2,7 @@
 
 namespace WeatherKata;
 
-use WeatherKata\ForecastPredictionRequest;
+use WeatherKata\Http\Client;
 
 class GetForecastPredictionController
 {
